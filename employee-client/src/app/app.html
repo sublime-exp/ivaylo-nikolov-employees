@@ -1,0 +1,72 @@
+<header>
+  <div class="header-content">
+    <h1>📊 CSV Upload Portal</h1>
+    <p>Upload a CSV to see employee collaborations!</p>
+  </div>
+</header>
+
+<main class="main-container">
+
+  @if (uploadResponse().length) {
+    <section class="response-section">
+      <h2>📈 Results</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+          <tr>
+            <th>Employee ID #1</th>
+            <th>Employee ID #2</th>
+            <th>Project ID</th>
+            <th>Days Worked</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (item of uploadResponse(); track item.projectId) {
+              <tr>
+                <td>{{ item.employeeId1 }}</td>
+                <td>{{ item.employeeId2 }}</td>
+                <td>{{ item.projectId }}</td>
+                <td>{{ item.daysWorked }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+
+  <button (click)="toggleUploadForm()" class="open-upload-btn">
+    Upload New File
+  </button>
+
+  <!-- Modal for Upload Form -->
+  @if (showUploadForm) {
+    <div class="modal-overlay" (click)="toggleUploadForm()"></div>
+    <div class="upload-modal">
+      <button class="close-btn" (click)="toggleUploadForm()">✖</button>
+
+      <form (ngSubmit)="onUpload()" class="upload-form"
+            (dragover)="onDragOver($event)"
+            (drop)="onDrop($event)">
+        <div class="drop-zone"
+             [class.dragging]="isDragging"
+             (click)="fileInput?.click()">
+          <p>📂 Drag & Drop or <strong>Click to Upload CSV</strong></p>
+          <input #fileInput type="file" (change)="onFileSelected($event)" accept=".csv" hidden />
+        </div>
+
+        @if(selectedFile()) {
+          <p class="file-name">✅ Selected: {{ selectedFile()?.name }}</p>
+        }
+
+        <button type="submit" [disabled]="!selectedFile()">🚀 Upload</button>
+      </form>
+
+    </div>
+  }
+
+</main>
+
+<footer>
+  <p>&copy; 2025 Top Employees. All rights reserved.</p>
+</footer>

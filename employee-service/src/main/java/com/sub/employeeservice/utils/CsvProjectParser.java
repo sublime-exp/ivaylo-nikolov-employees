@@ -1,12 +1,11 @@
-package com.sub.employeeservice.api;
+package com.sub.employeeservice.utils;
+
+import com.sub.employeeservice.domain.EmployeeProject;
 
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class CsvProjectParser {
 
@@ -16,14 +15,12 @@ public class CsvProjectParser {
             "dd-MM-yyyy"
     );
 
-    public static List<EmployeeProject> parseCsv(String resourcePath) throws IOException {
+    public static List<EmployeeProject> parseCsv(InputStream inputStream) {
         List<EmployeeProject> records = new ArrayList<>();
 
-        try (InputStream inputStream = CsvProjectParser.class.getClassLoader().getResourceAsStream(resourcePath);
-             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-
+        try (
+             BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(inputStream)))) {
             String line;
-            // Skip header
             reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] tokens = line.split(",");
@@ -33,6 +30,9 @@ public class CsvProjectParser {
                 Date dateTo = tokens[3].trim().equalsIgnoreCase("NULL") ? new Date() : parseDate(tokens[3].trim());
                 records.add(new EmployeeProject(empId, projectId, dateFrom, dateTo));
             }
+        }catch (Exception e) {
+            records = new ArrayList<>();
+            System.out.println("Error reading CSV: " + e.getMessage());
         }
         return records;
     }
