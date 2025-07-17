@@ -1,5 +1,7 @@
 package com.sub.employeeservice.api;
 
+import java.util.Objects;
+
 public class ProjectResponse {
     private int employeeId1;
     private int employeeId2;
@@ -46,6 +48,22 @@ public class ProjectResponse {
     }
 
     public ProjectResponse() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProjectResponse that = (ProjectResponse) o;
+        return employeeId1 == that.employeeId1 &&
+                employeeId2 == that.employeeId2 &&
+                projectId == that.projectId &&
+                daysWorked == that.daysWorked;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(employeeId1, employeeId2, projectId, daysWorked);
     }
 
     @Override

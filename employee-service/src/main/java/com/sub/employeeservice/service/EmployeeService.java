@@ -10,15 +10,13 @@ import reactor.core.publisher.Mono;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
 
-    public Mono<List<ProjectResponse>> findBestPair(FilePart filePart) {
+    public Mono<Set<ProjectResponse>> findCommonProjects(FilePart filePart) {
         return DataBufferUtils
                 .join(filePart.content())
                 .map(dataBuffer -> {
@@ -27,13 +25,13 @@ public class EmployeeService {
                     DataBufferUtils.release(dataBuffer);
 
                     InputStream inputStream = new ByteArrayInputStream(bytes);
-                    List<EmployeeProject> records = CsvProjectParser.parseCsv(inputStream);
+                    Set<EmployeeProject> records = CsvProjectParser.parseCsv(inputStream);
 
-                    return computeBestPair(records);
+                    return computeCommonProjects(records);
                 });
     }
 
-    public List<ProjectResponse> computeBestPair(List<EmployeeProject> records) {
+    public Set<ProjectResponse> computeCommonProjects(Set<EmployeeProject> records) {
         Map<Integer, Map<Integer, Map.Entry<Date, Date>>> schedule = new HashMap<>();
         records.forEach(r -> {
             schedule.putIfAbsent(r.getProjectId(), new HashMap<>());
@@ -97,6 +95,6 @@ public class EmployeeService {
                 })
                 .sorted((a, b) -> Integer.compare(b[3], a[3]))
                 .map(arr -> new ProjectResponse(arr[0], arr[1], arr[2], arr[3]))
-                .toList();
+                .collect(Collectors.toSet());
     }
 }

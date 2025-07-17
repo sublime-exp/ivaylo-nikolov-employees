@@ -65,22 +65,8 @@ footer {
   z-index: 999;
 }
 
-.upload-modal {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 2rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  z-index: 1000;
-  width: 90%;
-  max-width: 450px;
-  min-width: 320px;
-}
-
 .upload-form {
+  margin: 1rem auto;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -140,10 +126,25 @@ footer {
   transform: translateY(-2px);
 }
 
+.upload-modal {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2.5rem 1.5rem 1.5rem 1.5rem; /* extra top padding for the close button */
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 1000;
+  width: 90%;
+  max-width: 450px;
+  min-width: 320px;
+  position: fixed;
+}
+
 .close-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 50%;

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/employee")
@@ -20,8 +21,8 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Mono<List<ProjectResponse>> upload(@RequestPart("file") FilePart filePart) {
-        return employeeService.findBestPair(filePart);
+    public Mono<Set<ProjectResponse>> upload(@RequestPart("file") FilePart filePart) {
+        return employeeService.findCommonProjects(filePart);
     }
 
 }
